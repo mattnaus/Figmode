@@ -112,7 +112,12 @@ const getGoing = async () => {
         }
     }
 
-    console.log(screenFrames, sizes);
+    // check for some individual properties
+    for (let [i, node] of screenFrames[Object.keys(screenFrames)[0]].entries()) {
+        console.log(node);
+    }
+
+    //console.log(screenFrames, sizes);
 };
 
 getGoing();
