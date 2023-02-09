@@ -82,6 +82,7 @@ const traverse = (node: SceneNode) => {
 };
 
 let tempNodes = [];
+let sizes = [];
 const screenFrames = [];
 const regex = new RegExp("@[0-9]*");
 
@@ -90,16 +91,28 @@ const getGoing = async () => {
         if (node.type === "FRAME" && regex.test(node.name)) {
             //console.log(node.name);
             const size = node.name.match(/@[0-9]*/g)[0];
+            sizes.push(size);
             //console.log(size);
 
             tempNodes = [];
             traverse(node);
 
-            screenFrames[size] = await generateHTMLandCSS(tempNodes);
+            screenFrames[size] = tempNodes;
         }
     }
 
-    console.log(screenFrames);
+    // first check; each screensize frame should have the same number of nodes
+    let length = screenFrames[Object.keys(screenFrames)[0]].length;
+
+    for (let size in screenFrames) {
+        if (screenFrames[size].length !== length) {
+            figma.ui.postMessage({ err: `Screensize frame ${size} node tree is not correct.` });
+            delete screenFrames[size];
+            sizes = sizes.filter((n) => n !== size);
+        }
+    }
+
+    console.log(screenFrames, sizes);
 };
 
 getGoing();

@@ -285,7 +285,7 @@ export const generateHTMLandCSS = async (nodes: Array<figmaNode>) => {
             export:
                 figmaNode.getPluginData("export") !== ""
                     ? JSON.parse(figmaNode.getPluginData("export"))
-                    : { label: false, tag: false, type: false },
+                    : { tag: "div" },
             css: generateCssObj(node),
             children: [],
             ...(node.type === "TEXT" && { characters: node.characters, segments: node.segments }),
