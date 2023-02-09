@@ -1,0 +1,49 @@
+{
+    "name": "figmode",
+    "version": "1.0.0",
+    "description": "Export websites directly from Figma",
+    "main": "code.js",
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "rollup -c -w",
+        "clean": "rm -rf dist",
+        "typecheck": "tsc --noEmit"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://mattnaus@github.com/mattnaus/Figmode.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@figma/plugin-typings": "*",
+        "@tsconfig/svelte": "^3.0.0",
+        "autoprefixer": "^10.4.12",
+        "svelte-check": "^2.9.1",
+        "svelte-preprocess": "^4.10.7",
+        "tailwindcss": "^3.1.8",
+        "typescript": "^4.8.4"
+    },
+    "dependencies": {
+        "@rollup/plugin-commonjs": "^22.0.2",
+        "@rollup/plugin-html": "^0.2.4",
+        "@rollup/plugin-node-resolve": "^14.1.0",
+        "@rollup/plugin-typescript": "^8.5.0",
+        "cssnano": "^5.1.13",
+        "figma-plugin-ds-svelte": "^1.4.3",
+        "imagekit-javascript": "^1.5.4",
+        "lodash.clonedeep": "^4.5.0",
+        "postcss": "^8.4.17",
+        "rollup": "^2.79.1",
+        "rollup-plugin-postcss": "^4.0.2",
+        "rollup-plugin-svelte": "^7.1.0",
+        "rollup-plugin-svg": "^2.0.0",
+        "rollup-plugin-terser": "^7.0.2",
+        "svelte": "^3.50.1",
+        "tslib": "^2.4.0"
+    },
+    "bugs": {
+        "url": "https://github.com/mattnaus/Figmode/issues"
+    },
+    "homepage": "https://github.com/mattnaus/Figmode#readme"
+}
