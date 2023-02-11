@@ -1,10 +1,17 @@
 import { generateHTMLandCSS } from "./buildhtmlcss";
+import { randomString } from "../shared";
 
 interface node {
     [key: string]: any;
 }
 
-figma.showUI(__html__, { width: 640, height: 700, themeColors: true });
+let tempNodes = [];
+let sizes = [];
+let htmlCssNodes = {};
+let screenFrames = {};
+const regex = new RegExp("@[0-9]*");
+
+figma.showUI(__html__, { width: 300, height: 700, themeColors: true });
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === "cancel") {
@@ -81,12 +88,9 @@ const traverse = (node: SceneNode) => {
     }
 };
 
-let tempNodes = [];
-let sizes = [];
-const screenFrames = [];
-const regex = new RegExp("@[0-9]*");
-
 const getGoing = async () => {
+    htmlCssNodes = {};
+
     for (let node of figma.currentPage.children) {
         if (node.type === "FRAME" && regex.test(node.name)) {
             //console.log(node.name);
@@ -112,12 +116,42 @@ const getGoing = async () => {
         }
     }
 
-    // check for some individual properties
+    /*  check for some individual properties
+        - assume the first frame is the canonical one and run through each node in that frame
+        - compare certain properties of the node in the canonical frame to the same node in other frames
+        - if a single test fails, discard the entire frame
+    */
     for (let [i, node] of screenFrames[Object.keys(screenFrames)[0]].entries()) {
-        console.log(node);
+        if (i === 0) continue; //first node is the screensize frame itself
+
+        let type = node.type;
+        let name = node.name;
+
+        for (let [c, size] of sizes.entries()) {
+            if (c === 0) continue; //skip the first frame, which is the canonical
+
+            // compare nodes
+            if (type !== screenFrames[size][i].type) figma.ui.postMessage({ err: `Type mismatch on frame ${size}.` });
+            if (name !== screenFrames[size][i].name) figma.ui.postMessage({ err: `Name mismatch on frame ${size}.` });
+
+            if (type === screenFrames[size][i].type && name === screenFrames[size][i].name) {
+                //console.log(node);
+                //let data = JSON.parse(node.getPluginData("figmode"));
+                //data.canonical = true;
+                //node.setPluginData(JSON.stringify(data));
+            }
+
+            // assuming all is well, let's combine these
+        }
     }
 
-    //console.log(screenFrames, sizes);
+    // prep HTML/CSS
+    for (let screenFrame in screenFrames) {
+        htmlCssNodes[screenFrame] = await generateHTMLandCSS(screenFrames[screenFrame]);
+    }
+
+    //console.log(htmlCssNodes);
+    figma.ui.postMessage(htmlCssNodes);
 };
 
 getGoing();

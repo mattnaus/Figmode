@@ -14,7 +14,6 @@ interface figmaNode {
 
 interface processedNode {
     id: String;
-    _fid: String;
     name?: string;
     css: Object;
     children?: Array<String>;
@@ -279,12 +278,11 @@ export const generateHTMLandCSS = async (nodes: Array<figmaNode>) => {
         const figmaNode = figma.currentPage.findOne((n) => n.id === node.id);
 
         let processed: processedNode = {
-            id: randomString(25),
-            _fid: node.id,
+            id: node.id,
             name: node.name,
             export:
-                figmaNode.getPluginData("export") !== ""
-                    ? JSON.parse(figmaNode.getPluginData("export"))
+                figmaNode.getPluginData("figmode") !== ""
+                    ? JSON.parse(figmaNode.getPluginData("figmode"))
                     : { tag: "div" },
             css: generateCssObj(node),
             children: [],
@@ -331,16 +329,16 @@ export const generateHTMLandCSS = async (nodes: Array<figmaNode>) => {
     for (let node of nodes as any) {
         // children
         if ("children" in node) {
-            const parentFigmaNode = data.find((obj) => obj._fid === node.id)!;
+            const parentFigmaNode = data.find((obj) => obj.id === node.id)!;
             for (const child of node.children) {
-                let childFigmaNode: processedNode = data.find((obj) => obj._fid === child.id)!;
+                let childFigmaNode: processedNode = data.find((obj) => obj.id === child.id)!;
                 if (childFigmaNode !== undefined) parentFigmaNode.children?.push(childFigmaNode.id);
             }
         }
 
         // parent
-        const parentFigmaNode = data.find((obj) => obj._fid === node.parent.id)!;
-        const childFigmaNode = data.find((obj) => obj._fid === node.id)!;
+        const parentFigmaNode = data.find((obj) => obj.id === node.parent.id)!;
+        const childFigmaNode = data.find((obj) => obj.id === node.id)!;
         childFigmaNode.parent = parentFigmaNode !== undefined ? parentFigmaNode.id : false;
     }
 
