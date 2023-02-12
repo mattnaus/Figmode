@@ -41,7 +41,7 @@
             nodesForTransport[size][1].parent = false;
         };
 
-        console.log(nodesForTransport);
+        //console.log(nodesForTransport);
 
         const xhrNodes = new XMLHttpRequest();
         xhrNodes.open("POST", `${serverUrl}/p`, true);

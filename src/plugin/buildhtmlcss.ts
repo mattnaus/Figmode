@@ -95,15 +95,20 @@ const generateCssObj = (node: node): object => {
             css["border-bottom-color"] = borderRBGa;
         }
 
-        if (node.bottomLeftRadius !== undefined) css["border-bottom-left-radius"] = node.bottomLeftRadius + "px";
-        if (node.bottomRightRadius !== undefined) css["border-bottom-right-radius"] = node.bottomRightRadius + "px";
-        if (node.topLeftRadius !== undefined) css["border-top-left-radius"] = node.topLeftRadius + "px";
-        if (node.topRightRadius !== undefined) css["border-top-right-radius"] = node.topRightRadius + "px";
+        if (node.bottomLeftRadius !== undefined && node.bottomLeftRadius !== 0)
+            css["border-bottom-left-radius"] = node.bottomLeftRadius + "px";
+        if (node.bottomRightRadius !== undefined && node.bottomRightRadius !== 0)
+            css["border-bottom-right-radius"] = node.bottomRightRadius + "px";
+        if (node.topLeftRadius !== undefined && node.topLeftRadius !== 0)
+            css["border-top-left-radius"] = node.topLeftRadius + "px";
+        if (node.topRightRadius !== undefined && node.topRightRadius !== 0)
+            css["border-top-right-radius"] = node.topRightRadius + "px";
 
-        if (node.paddingLeft !== undefined) css["padding-left"] = node.paddingLeft + "px";
-        if (node.paddingRight !== undefined) css["padding-right"] = node.paddingRight + "px";
-        if (node.paddingTop !== undefined) css["padding-top"] = node.paddingTop + "px";
-        if (node.paddingBottom !== undefined) css["padding-bottom"] = node.paddingBottom + "px";
+        if (node.paddingLeft !== undefined && node.paddingLeft !== 0) css["padding-left"] = node.paddingLeft + "px";
+        if (node.paddingRight !== undefined && node.paddingRight !== 0) css["padding-right"] = node.paddingRight + "px";
+        if (node.paddingTop !== undefined && node.paddingTop !== 0) css["padding-top"] = node.paddingTop + "px";
+        if (node.paddingBottom !== undefined && node.paddingBottom !== 0)
+            css["padding-bottom"] = node.paddingBottom + "px";
 
         if (node.type === "TEXT") {
             css["color"] = css["background-color"];
@@ -165,7 +170,6 @@ const generateCssObj = (node: node): object => {
 
             if (node.layoutMode === "VERTICAL") {
                 // flex vert
-                // flex vert
                 css["flex-direction"] = "column";
 
                 if (node.counterAxisSizingMode === "AUTO") {
@@ -178,6 +182,8 @@ const generateCssObj = (node: node): object => {
                 css["row-gap"] = node.itemSpacing + "px";
             } else if (node.layoutMode === "HORIZONTAL") {
                 // flex hor
+                css["flex-direction"] = "row";
+
                 if (node.primaryAxisSizingMode === "AUTO") {
                     delete css.width;
                     css.display = "inline-flex";

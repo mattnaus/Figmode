@@ -94,7 +94,7 @@ const getGoing = async () => {
     for (let node of figma.currentPage.children) {
         if (node.type === "FRAME" && regex.test(node.name)) {
             //console.log(node.name);
-            const size = node.name.match(/@[0-9]*/g)[0];
+            const size = node.name.match(/@[0-9]*/g)[0].substring(1);
             sizes.push(size);
             //console.log(size);
 
